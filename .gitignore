@@ -1,0 +1,24 @@
+# Byte-compiled / optimized files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environments
+venv/
+.venv/
+env/
+ENV/
+
+# Generated project output -- not source code, safe to regenerate
+sample_logs/
+reports/
+
+# Editor/OS cruft
+.vscode/
+.DS_Store
+Thumbs.db
+
+# Packaging (harmless even though this project isn't packaged as a pip module)
+*.egg-info/
+dist/
+build/
