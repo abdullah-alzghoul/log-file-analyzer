@@ -2,7 +2,7 @@
 
 A command-line tool that parses Linux authentication logs and Apache/Nginx access logs, flags suspicious or malicious activity across 12 detection categories, and produces severity-ranked, human-readable alerts plus exportable JSON/CSV reports.
 
-Built as a portfolio project to demonstrate practical Python and security-analysis skills — real log formats, a synthetic sample-data generator so every detection rule can be verified end-to-end, and 70 passing unit tests.
+Built as a portfolio project to demonstrate practical Python and security-analysis skills — real log formats, a synthetic sample-data generator so every detection rule can be verified end-to-end, and 75 passing unit tests.
 
 ## Features
 
@@ -27,7 +27,7 @@ Built as a portfolio project to demonstrate practical Python and security-analys
 - Console output grouped by severity, plus optional JSON and CSV export
 - Malformed lines, empty files, and encoding issues are skipped and warned about — never crash the run
 - Ships with `scripts/generate_sample_logs.py`, which builds a realistic day of synthetic logs with every category deliberately triggered at least once — no live server or real data required to see every rule fire
-- 70 unit tests across parsing, detection rules, and orchestration
+- 75 unit tests across parsing, detection rules, and orchestration
 
 ## Project structure
 
@@ -67,7 +67,7 @@ log-file-analyzer/
 ## Setup
 
 ```powershell
-git clone <your-repo-url>
+git clone https://github.com/abdullah-alzghoul/log-file-analyzer.git
 cd log-file-analyzer
 ```
 
@@ -145,7 +145,7 @@ Expected result:
 
 ```
 ----------------------------------------------------------------------
-Ran 70 tests in 0.0XXs
+Ran 75 tests in 0.158s
 
 OK
 ```
